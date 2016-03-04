@@ -5,7 +5,7 @@ services:
     image: jamesnesbitt/wunder-base:latest
     volumes:
       - "./app/www:/app/www"
-      - "./shared:/shared"
+      - "./app/shared:/app/shared"
   web:
     build:
       context: ./web
