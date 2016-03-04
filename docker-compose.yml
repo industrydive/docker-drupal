@@ -1,0 +1,41 @@
+version: "2"
+
+services:
+  source:
+    image: jamesnesbitt/wunder-base:latest
+    volumes:
+      - "./app/www:/app/www"
+  web:
+    build:
+      context: ./web
+    links:
+      - "php:fpm.app"
+    volumes_from:
+      - source
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - php
+      - db
+  php:
+    build:
+      context: ./php
+    volumes_from:
+      - source
+  db:
+    image: mariadb:10.1
+    environment:
+      - "MYSQL_ALLOW_EMPTY_PASSWORD=1"
+      - "MYSQL_DATABASE=smt"
+      - "MYSQL_USER=smt"
+      - "MYSQL_PASSWORD=smt"
+    volumes_from:
+      - source
+    ports:
+      - "3306:3306"
+  shell:
+    build:
+      context: ./shell
+    volumes_from:
+      - source
